@@ -9,6 +9,9 @@ var config = require('./config');
 mongoose.connect(config.mongo.dbUrl);
 
 var app = express();
+if (confic.env === 'production'){
+    app.set('trust proxy', 1);
+}
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
