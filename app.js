@@ -9,7 +9,7 @@ var config = require('./config');
 mongoose.connect(config.mongo.dbUrl);
 
 var app = express();
-if (confic.env === 'production'){
+if (config.env === 'production'){
     app.set('trust proxy', 1);
 }
 
