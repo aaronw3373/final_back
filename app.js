@@ -21,14 +21,40 @@ app.use(cookieParser());
 // Configuring Passport
 var passport = require('passport');
 var expressSession = require('express-session');
-// TODO - Why Do we need this key ?
+
 app.use(expressSession({secret: 'JustTryAndGuess'}));
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Initialize Passport
+var indexRoutes = require('./routes/index.js');
+app.use('/', indexRoutes);
+
 var authRoutes = require('./routes/auth.js')(passport);
 app.use('/auth', authRoutes);
+
+var userRoutes = require('./routes/users.js');
+app.use('/user', userRoutes);
+
+var statusRoutes = require('./routes/statuses.js');
+app.use('/status', statusRoutes);
+
+var pictureRoutes = require('./routes/pictures.js');
+app.use('/picture', pictureRoutes);
+
+var deleteRoutes = require('./routes/delete.js');
+app.use('/delete', deleteRoutes);
+
+var searchRoutes = require('./routes/search.js');
+app.use('/search', searchRoutes);
+
+var listingRoutes = require('./routes/listing.js');
+app.use('/listing', listingRoutes);
+
+var commentRoutes = require('./routes/comment.js');
+app.use('/comment', commentRoutes);
+
+var messageRoutes = require('./routes/messages.js');
+app.use('/conversation', messageRoutes);
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
