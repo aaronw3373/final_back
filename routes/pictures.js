@@ -38,11 +38,7 @@ router.get('/allPictures', isAuthenticated, function(req, res) {
       res.status(404);
       res.end();
     }
-    res.render('listing', {
-      title: 'Pictures',
-      user:req.user,
-      listing: pictures
-    });
+    res.send(pictures);
   });
 });
 

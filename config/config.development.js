@@ -5,6 +5,6 @@ config.hostname = 'localhost';
 config.serverPort = 3000;
 
 config.mongo = {};
-config.mongo.dbUrl = 'mongodb://localhost/final';
+config.mongo.dbUrl = 'mongodb://localhost/dbclarke';
 
 module.exports = config;

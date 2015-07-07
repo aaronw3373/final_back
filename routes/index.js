@@ -4,19 +4,19 @@ var router = express.Router();
 
 router.get('/', function(req, res) {
   // PRODUCTION MODE
-  if (req.secure) {
-    res.render('index', {
-      message: req.flash('message')
-    });
-  }
-  else {
-    res.redirect('https://clarkesocial.herokuapp.com');
-  }
+  // if (req.secure) {
+  //   res.render('index', {
+  //     message: req.flash('message')
+  //   });
+  // }
+  // else {
+  //   res.redirect('https://clarkesocial.herokuapp.com');
+  // }
 
   //DEV MODE
-  // res.render('index', {
-  //   message: req.flash('message')
-  // });
+  res.render('index', {
+    message: req.flash('message')
+  });
 });
 
 /* GET About Page */

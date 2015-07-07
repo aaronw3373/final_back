@@ -19,6 +19,10 @@ var userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  password: {
+    type: String,
+    required: true
+  },
   email: {
     type: String,
     required: true,
@@ -27,9 +31,6 @@ var userSchema = new mongoose.Schema({
   dob: {
     type: Date,
     required: false
-  },
-  password: {
-    type: String
   },
   following: [],
   followedBy: [],

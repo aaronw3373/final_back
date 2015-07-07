@@ -1,7 +1,7 @@
 0 info it worked if it ends with ok
 1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'start' ]
 2 info using npm@2.11.2
-3 info using node@v0.12.5
+3 info using node@v0.12.6
 4 verbose node symlink /usr/bin/node
 5 verbose run-script [ 'prestart', 'start', 'poststart' ]
 6 info prestart final-backend@0.0.1
@@ -20,7 +20,7 @@
 12 verbose cwd /home/aaronw3373/personal/final_back
 13 error Linux 3.19.0-21-generic
 14 error argv "/usr/bin/node" "/usr/bin/npm" "start"
-15 error node v0.12.5
+15 error node v0.12.6
 16 error npm  v2.11.2
 17 error code ELIFECYCLE
 18 error final-backend@0.0.1 start: `node ./bin/www`
