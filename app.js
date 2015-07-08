@@ -51,6 +51,9 @@ app.use('/auth', authRoutes);
 var userRoutes = require('./routes/users.js');
 app.use('/user', userRoutes);
 
+var tripRoutes = require('./routes/trip.js');
+app.use('/trip', tripRoutes);
+
 var statusRoutes = require('./routes/statuses.js');
 app.use('/status', statusRoutes);
 

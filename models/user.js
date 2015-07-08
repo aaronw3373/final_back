@@ -28,23 +28,7 @@ var userSchema = new mongoose.Schema({
     required: true,
     match: /\S+@\S+\.\S+/
   },
-  dob: {
-    type: Date,
-    required: false
-  },
-  following: [],
-  followedBy: [],
-  age: {
-    type: String,
-  },
-  zip: {
-    type: String,
-  },
   profilePicture: {
-    type: String,
-    ref: 'Picture'
-  },
-  backgroundPicture: {
     type: String,
     ref: 'Picture'
   }

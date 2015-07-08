@@ -27,9 +27,11 @@ var aws_secret_key = process.env.AWS_SECRET_KEY_ID;
 
 /* GET ALL USER Pictures */
 router.get('/allPictures', isAuthenticated, function(req, res) {
-  Picture.find({
-    _creator: req.user.username
-  })
+  Picture.find(
+  // {
+  //   _creator: req.user.username
+  // }
+  )
   .sort('-postedAt')
   .exec( function(error, pictures) {
     if (error) {

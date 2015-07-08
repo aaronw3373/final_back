@@ -73,7 +73,9 @@ router.get('/followers', isAuthenticated, function(req, res) {
               console.log(error);
               followLength = followLength - 1;
             } else {
-              array.push(follower);
+              if (follower !== null){
+                array.push(follower);
+              }
               length +=1;
               if(length === followLength){
                 res.send(array);
@@ -90,7 +92,7 @@ router.get('/followers', isAuthenticated, function(req, res) {
 });
 
 /* GET who I follow*/
-router.get('/followings', isAuthenticated, function(req, res) {
+router.get('/friends', isAuthenticated, function(req, res) {
   User.findOne({username: req.user.username},function(error, user){
     if (error) {
       console.log(error)
@@ -107,7 +109,9 @@ router.get('/followings', isAuthenticated, function(req, res) {
               console.log(error);
               followLength = followLength - 1;
             } else {
-              array.push(follower);
+              if (follower !== null){
+                array.push(follower);
+              }
               length +=1;
               if(length === followLength){
                 res.send(array);
@@ -157,7 +161,7 @@ router.get('/:username', isAuthenticated, function(req, res) {
           res.status(404);
           res.end();
         }
-        res.send(pictures, statusList, otherUser);
+        res.send({pictures: pictures, statuses:statusList, otherUser: otherUser});
       });
     });
   });
