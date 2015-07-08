@@ -3,13 +3,12 @@ var router = express.Router();
 var Conversation = require('../models/conversation.js');
 
 var isAuthenticated = function(req, res, next) {
-  // if user is authenticated in the session, call the next() to call the next request handler
-  // Passport adds this method to request object. A middleware is allowed to add properties to
-  // request and response objects
-  if (req.isAuthenticated())
+  if (req.isAuthenticated()){
     return next();
-  // if the user is not authenticated then redirect him to the login page
-  res.redirect('/');
+  } else {
+    res.status(401);
+    res.end();
+  }
 }
 
 /* Post picture Message */
@@ -38,7 +37,8 @@ router.post('/newConversation', isAuthenticated, function(req, res) {
       res.end();
       throw err;
     } else {
-        res.redirect('/conversation/all');
+        res.status(200);
+        res.end();
       }
    });
 });
@@ -75,7 +75,8 @@ router.post('/:convoID/newMessage', isAuthenticated, function(req, res) {
           throw err;
         } else {
           console.log(Convo);
-          res.redirect('/conversation/' + Convo._id);
+          res.status(200);
+          res.end();
         }
       });
     }
@@ -91,10 +92,7 @@ router.get('/all',isAuthenticated,function(req,res) {
       res.status(404);
       res.end()
     } else {
-      res.render('conversations',{
-        user: req.user,
-        convos: convos
-      })
+      res.send(convos);
     }
   });
 })
@@ -108,10 +106,7 @@ router.get('/:convoID',isAuthenticated,function(req,res) {
       res.status(404);
       res.end()
     } else {
-      res.render('conversation',{
-        user: req.user,
-        convo: convo
-      })
+      res.send(convo);
     }
   });
 })

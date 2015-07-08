@@ -5,13 +5,12 @@ var Status = require('../models/status.js');
 var Picture = require('../models/picture.js');
 
 var isAuthenticated = function(req, res, next) {
-  // if user is authenticated in the session, call the next() to call the next request handler
-  // Passport adds this method to request object. A middleware is allowed to add properties to
-  // request and response objects
-  if (req.isAuthenticated())
+  if (req.isAuthenticated()){
     return next();
-  // if the user is not authenticated then redirect him to the login page
-  res.redirect('/');
+  } else {
+    res.status(401);
+    res.end();
+  }
 }
 
 /* GET All Users*/
@@ -19,10 +18,7 @@ router.get('/', isAuthenticated, function(req, res) {
   User.find({})
   .select('-password')
   .exec(function(error, userList) {
-    res.render('users', {
-      users: userList,
-      user: req.user
-    });
+    res.send(userList);
   });
 });
 
@@ -36,7 +32,8 @@ router.get('/makeProfilePicture/:src', isAuthenticated, function(req, res) {
       res.end();
      }
      else {
-      res.redirect('/auth/home');
+      res.status(200);
+      res.end();
     }
    });
 });
@@ -51,7 +48,8 @@ router.get('/makeBackgroundPicture/:src', isAuthenticated, function(req, res) {
       res.end();
      }
      else {
-      res.redirect('/auth/home');
+      res.status(200);
+      res.end();
     }
    });
 });
@@ -78,17 +76,14 @@ router.get('/followers', isAuthenticated, function(req, res) {
               array.push(follower);
               length +=1;
               if(length === followLength){
-                res.render('users', {
-                  title: 'Followers',
-                  users: array,
-                  user: req.user
-                });
+                res.send(array);
               }
             }
           });
         }
       }else {
-        res.redirect('/auth/home');
+        res.status(404);
+        res.end();
       }
     }
   });
@@ -115,17 +110,14 @@ router.get('/followings', isAuthenticated, function(req, res) {
               array.push(follower);
               length +=1;
               if(length === followLength){
-                res.render('users', {
-                  title: 'Friends',
-                  users: array,
-                  user: req.user
-                });
+                res.send(array);
               }
             }
           });
         }
       } else {
-        res.redirect('/auth/home');
+        res.status(404)
+        res.end();
       }
     }
   });
@@ -165,15 +157,8 @@ router.get('/:username', isAuthenticated, function(req, res) {
           res.status(404);
           res.end();
         }
-        res.render('user', {
-          pictures: pictures,
-          statuses: statusList,
-          otherUser: otherUser,
-          user: req.user
-       });
+        res.send(pictures, statusList, otherUser);
       });
-
-
     });
   });
 });
@@ -186,7 +171,8 @@ router.post('/follow/:otherUser', isAuthenticated, function(req, res, next) {
       if (user.following[i] === req.params.otherUser) {
         followed = true;
         console.log("cannot follow someone twice");
-        res.redirect('/auth/home');
+        res.status(404);
+        res.end();
       }
     }
     if (followed === false) {
@@ -209,7 +195,8 @@ router.post('/follow/:otherUser', isAuthenticated, function(req, res, next) {
                 res.status(404);
                 res.end();
               } else {
-                res.redirect('/user/' + req.params.otherUser);
+                res.status(200)
+                res.end()
               }
             });
           });

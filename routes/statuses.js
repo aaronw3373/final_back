@@ -5,13 +5,12 @@ var Status = require('../models/status.js');
 var Comment = require('../models/comment.js');
 
 var isAuthenticated = function(req, res, next) {
-  // if user is authenticated in the session, call the next() to call the next request handler
-  // Passport adds this method to request object. A middleware is allowed to add properties to
-  // request and response objects
-  if (req.isAuthenticated())
+  if (req.isAuthenticated()){
     return next();
-  // if the user is not authenticated then redirect him to the login page
-  res.redirect('/');
+  } else {
+    res.status(401);
+    res.end();
+  }
 }
 
 /* GET ALL USER STATUSES */
@@ -26,11 +25,7 @@ router.get('/allStatuses', isAuthenticated, function(req, res) {
       res.status(404);
       res.end();
     }
-    res.render('listing', {
-      title: 'Statuses',
-      user:req.user,
-      listing: statusList
-    });
+    res.send(statusList);
   });
 });
 
@@ -60,7 +55,8 @@ router.post('/newStatus', isAuthenticated, function(req, res) {
           console.log('Error in Saving status: ' + err);
           throw err;
         }
-        res.redirect('/auth/home');
+        res.status(200);
+        res.end();
       });
     }
 
@@ -73,7 +69,8 @@ router.post('/like/:statusID', isAuthenticated, function(req, res) {
   Status.findOne({"_id":req.params.statusID}).exec( function(err, status) {
     if (err) {
       console.log(err);
-      res.redirect('/auth/home');
+      res.status(404);
+      res.end();
     } else {
       var liked = false;
       for (var i = 0; i < status.likers.length; i++) {
@@ -90,12 +87,14 @@ router.post('/like/:statusID', isAuthenticated, function(req, res) {
             res.status(404);
             res.end();
           } else {
-            res.redirect('/status/' + req.params.statusID);
+            res.status(200);
+            res.end();
           }
         });
       } else {
         console.log("already liked");
-        res.redirect('/status/' + req.params.statusID);
+        res.status(404);
+        res.end();
       }
     }
   });
@@ -117,11 +116,7 @@ router.get('/:statusID', isAuthenticated, function(req, res) {
       if (error) {
         console.log(error);
       }
-      res.render('status',{
-        user: req.user,
-        status: status,
-        comments: comments
-      })
+      res.send(status,comments)
     });
   });
 });
@@ -141,7 +136,8 @@ router.post('/:src/newComment', isAuthenticated, function(req, res) {
       throw err;
     } else {
         console.log(newComment);
-        res.redirect('/status/'+req.params.src);
+        res.status(200);
+        res.end();
       }
    });
 });

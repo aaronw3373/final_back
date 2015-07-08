@@ -15,16 +15,15 @@ require('dotenv').load();
 var aws_access_key =  process.env.AWS_ACCESS_KEY_ID;
 var aws_secret_key = process.env.AWS_SECRET_KEY_ID;
 
-
-var isAuthenticated = function(req, res, next) {
-  // if user is authenticated in the session, call the next() to call the next request handler
-  // Passport adds this method to request object. A middleware is allowed to add properties to
-  // request and response objects
-  if (req.isAuthenticated())
+  var isAuthenticated = function(req, res, next) {
+  if (req.isAuthenticated()){
     return next();
-  // if the user is not authenticated then redirect him to the login page
-  res.redirect('/');
+  } else {
+    res.status(401);
+    res.end();
+  }
 }
+
 
 /* GET ALL USER Pictures */
 router.get('/allPictures', isAuthenticated, function(req, res) {
@@ -64,13 +63,15 @@ router.post('/like/:pictureID', isAuthenticated, function(req, res) {
           if (err) {
             console.log(err);
             res.status(404);
-            res.redirect('/picture/' + req.params.pictureID);
+            res.end()
           } else {
-            res.redirect('/picture/' + req.params.pictureID);
+            res.status(200);
+            res.end();
           }
         });
       } else {
-        res.redirect('/picture/' + req.params.pictureID);
+        res.status(200);
+        res.end();
       }
     }
   });
@@ -130,7 +131,8 @@ router.post('/upload', isAuthenticated, function(req, res) {
               throw err;
             } else {
                 console.log('picture saved!');
-                res.redirect('/picture/allPictures');
+                res.status(200);
+                res.end();
               }
             });
           }
@@ -157,11 +159,7 @@ router.post('/upload', isAuthenticated, function(req, res) {
       if (error) {
         console.log(error);
       }
-      res.render('picture',{
-        user: req.user,
-        picture: picture,
-        comments: comments
-      })
+      res.send(picture, comments);
     });
   });
 });
@@ -181,7 +179,8 @@ router.post('/upload', isAuthenticated, function(req, res) {
       throw err;
     } else {
         console.log(newComment);
-        res.redirect('/picture/' + req.params.src);
+        res.status(200);
+        res.end();
       }
    });
 });
