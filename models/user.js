@@ -28,6 +28,8 @@ var userSchema = new mongoose.Schema({
     required: true,
     match: /\S+@\S+\.\S+/
   },
+  following: [],
+  followedBy: [],
   profilePicture: {
     type: String,
     ref: 'Picture'
