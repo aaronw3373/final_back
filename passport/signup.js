@@ -25,7 +25,6 @@ module.exports = function(passport){
                         // if there is no user with that email
                         // create the user
                         var newUser = new User();
-                        console.log(req.param('email'))
                         // set the user's local credentials
                         newUser.username = username;
                         newUser.password = createHash(password);

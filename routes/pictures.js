@@ -100,15 +100,16 @@ router.post('/upload', isAuthenticated, function(req, res) {
   if(req.files !== undefined) {
     fs.readFile(req.files.thumbnail.path, function(err, data){
       var params = {
-        Bucket: 'clarkedbteer',
+        Bucket: 'powplanner',
         Key: req.files.thumbnail.name,
-        Body: data
+        Body: data,
+        ACL:'public-read',
       };
-    s3.putObject(params, function (perr, pres) {
-      if (perr) {
-        console.log("Error uploading data: ", perr);
+    s3.putObject(params, function (error, response) {
+      if (error) {
+        console.log("Error uploading data: ", error);
       } else {
-        console.log("Successfully uploaded data to clarkedbteer");
+        console.log("Successfully uploaded data to powplanner");
         User.findOne({
           username: req.user.username
         }, function(error) {
