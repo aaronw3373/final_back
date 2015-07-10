@@ -1,3 +1,4 @@
+require('dotenv').load();
 var express = require('express');
 var express_session = require('express-session');
 var MongoStore = require('connect-mongo')(express_session);
@@ -9,7 +10,7 @@ var mongoose = require('mongoose');
 var config = require('./config');
 var cors = require('cors');
 var passport = require('passport');
-require('dotenv').load();
+
 
 var app = express();
 

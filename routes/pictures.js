@@ -9,6 +9,7 @@ var fs = require('fs');
 var multer = require('multer');
 var AWS = require('aws-sdk');
 var bodyParser = require('body-parser');
+var smushit = require('node-smushit');
 require('dotenv').load();
 
 
