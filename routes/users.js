@@ -200,7 +200,7 @@ router.post('/follow/:otherUser', isAuthenticated, function(req, res, next) {
                 res.end();
               } else {
                 res.status(200)
-                res.end()
+                res.end();
               }
             });
           });

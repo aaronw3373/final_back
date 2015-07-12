@@ -35,6 +35,20 @@ router.post('/newTrip', isAuthenticated, function(req, res){
    });
 })
 
+router.get('/my', isAuthenticated, function(req, res){
+  Trip.find({
+    people: req.user.username
+  })
+  .exec(function(error, trips) {
+    if (error) {
+      console.log(error);
+      res.status(404);
+      res.end();
+    }
+    res.send(trips);
+  });
+})
+
 router.get('/all', isAuthenticated, function(req, res){
   Trip.find({})
   .exec(function(error, trips) {
