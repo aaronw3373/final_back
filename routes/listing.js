@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/user.js');
-var Status = require('../models/status.js');
+// var Status = require('../models/status.js');
 var Picture = require('../models/picture.js');
 
 var isAuthenticated = function(req, res, next) {
@@ -29,21 +29,21 @@ router.get('/', isAuthenticated, function(req, res) {
             followLength = followLength - 1;
           } else {
 
-            Status.find({
-              _creator: follower.username
-            })
-            .sort('-postedAt')
-            .exec( function(error, statusList) {
-              if (error) {
-                console.log(error);
-                res.status(404);
-                res.end();
-              } else {
-                statusList.forEach(function(status) {
-                  array.push(status);
-                })
-                }
-              });
+            // Status.find({
+            //   _creator: follower.username
+            // })
+            // .sort('-postedAt')
+            // .exec( function(error, statusList) {
+            //   if (error) {
+            //     console.log(error);
+            //     res.status(404);
+            //     res.end();
+            //   } else {
+            //     statusList.forEach(function(status) {
+            //       array.push(status);
+            //     })
+            //     }
+            //   });
 
             Picture.find({
               _creator: follower.username

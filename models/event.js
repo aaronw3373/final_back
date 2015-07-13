@@ -29,6 +29,7 @@ var tripSchema = new mongoose.Schema({
     type: String,
     ref: 'User'
   },
+  catagories: {},
   people: []
 });
 

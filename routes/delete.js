@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/user.js');
-var Status = require('../models/status.js');
+// var Status = require('../models/status.js');
 var Picture = require('../models/picture.js');
 var Comment = require('../models/comment.js');
 var Conversation = require('../models/conversation.js');
@@ -33,21 +33,21 @@ var isAuthenticated = function(req, res, next) {
   });
 
 
-/* Delete Status */
-router.delete('/status/:statusID', isAuthenticated, function(req, res) {
-  Status.remove({
-    _id: req.params.statusID
-  })
-  .exec(function(error) {
-    if (error) {
-      console.log(error);
-      res.status(404);
-      res.end();
-    }
-    res.status(204);
-    res.end();
-  });
-});
+// /* Delete Status */
+// router.delete('/status/:statusID', isAuthenticated, function(req, res) {
+//   Status.remove({
+//     _id: req.params.statusID
+//   })
+//   .exec(function(error) {
+//     if (error) {
+//       console.log(error);
+//       res.status(404);
+//       res.end();
+//     }
+//     res.status(204);
+//     res.end();
+//   });
+// });
 
 /* Delete Picture */
 router.delete('/picture/:pictureID', isAuthenticated, function(req, res) {

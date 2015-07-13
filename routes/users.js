@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/user.js');
-var Status = require('../models/status.js');
+// var Status = require('../models/status.js');
 var Picture = require('../models/picture.js');
 
 var isAuthenticated = function(req, res, next) {
@@ -140,16 +140,16 @@ router.get('/:username', isAuthenticated, function(req, res) {
       res.end()
     }
 
-    Status.find({
-      _creator: req.params.username
-    })
-    .sort('-postedAt')
-    .exec( function(error, statusList) {
-      if (error) {
-        console.log(error);
-        res.status(404);
-        res.end();
-      }
+    // Status.find({
+    //   _creator: req.params.username
+    // })
+    // .sort('-postedAt')
+    // .exec( function(error, statusList) {
+    //   if (error) {
+    //     console.log(error);
+    //     res.status(404);
+    //     res.end();
+    //   }
 
       Picture.find({
         _creator: req.params.username
@@ -161,9 +161,9 @@ router.get('/:username', isAuthenticated, function(req, res) {
           res.status(404);
           res.end();
         }
-        res.send({pictures: pictures, statuses:statusList, otherUser: otherUser});
+        res.send({pictures: pictures, otherUser: otherUser});
       });
-    });
+    // });
   });
 });
 

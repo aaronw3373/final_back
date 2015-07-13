@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/user.js');
-var Status = require('../models/status.js');
+// var Status = require('../models/status.js');
 var Picture = require('../models/picture.js');
 var Comment = require('../models/comment.js');
 var async = require('async');

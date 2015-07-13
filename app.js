@@ -52,11 +52,8 @@ app.use('/auth', authRoutes);
 var userRoutes = require('./routes/users.js');
 app.use('/user', userRoutes);
 
-var tripRoutes = require('./routes/trip.js');
+var tripRoutes = require('./routes/event.js');
 app.use('/trip', tripRoutes);
-
-var statusRoutes = require('./routes/statuses.js');
-app.use('/status', statusRoutes);
 
 var pictureRoutes = require('./routes/pictures.js');
 app.use('/picture', pictureRoutes);

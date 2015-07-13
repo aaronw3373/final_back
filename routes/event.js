@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var Trip = require('../models/trip.js');
+var Trip = require('../models/event.js');
 
 var isAuthenticated = function(req, res, next) {
   if (req.isAuthenticated()){
@@ -23,6 +23,7 @@ router.post('/newTrip', isAuthenticated, function(req, res){
   newTrip.endDate = req.body.endDate;
   newTrip.creator = req.user.username;
   newTrip.people = req.body.people;
+  newTrip.catagories = req.body.catagory;
 
   newTrip.save(function(err) {
     if (err) {

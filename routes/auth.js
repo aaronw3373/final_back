@@ -48,7 +48,8 @@ module.exports = function(passport) {
   //       res.status(404);
   //       res.end();
   //     } else {
-  //       res.redirect('/auth/patch/user');
+  //       res.status(200);
+  //       res.end();
   //     }
   //   });
   // });
