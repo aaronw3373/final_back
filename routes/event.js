@@ -62,6 +62,19 @@ router.get('/all', isAuthenticated, function(req, res){
   });
 })
 
+router.get('/random', isAuthenticated, function(req, res){
+  Trip.find({})
+  .exec(function(error, trips) {
+    if (error) {
+      console.log(error);
+      res.status(404);
+      res.end();
+    }
+    var rand = Math.floor(Math.random() * (trips.length));
+    res.send(trips[rand]);
+  });
+})
+
 router.get('/:tripId', isAuthenticated, function(req, res){
   Trip.find({
     _id: req.params.tripId
