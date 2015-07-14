@@ -22,10 +22,10 @@ router.get('/', isAuthenticated, function(req, res) {
   });
 });
 
-router.get('/makeProfilePicture/:src', isAuthenticated, function(req, res) {
+router.post('/makeProfilePicture', isAuthenticated, function(req, res) {
   User.findOneAndUpdate({
        username: req.user.username
-   },{profilePicture: req.params.src},function(error, picture) {
+   },{profilePicture: req.body.src},function(error, picture) {
     if (error) {
       console.log(error);
       res.status(404);

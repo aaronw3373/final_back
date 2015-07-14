@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Trip = require('../models/event.js');
+var fuzzy = require('fuzzy');
 
 var isAuthenticated = function(req, res, next) {
   if (req.isAuthenticated()){
@@ -50,18 +51,6 @@ router.get('/my', isAuthenticated, function(req, res){
   });
 })
 
-router.get('/all', isAuthenticated, function(req, res){
-  Trip.find({})
-  .exec(function(error, trips) {
-    if (error) {
-      console.log(error);
-      res.status(404);
-      res.end();
-    }
-    res.send(trips);
-  });
-})
-
 router.get('/random', isAuthenticated, function(req, res){
   Trip.find({})
   .exec(function(error, trips) {
@@ -72,6 +61,57 @@ router.get('/random', isAuthenticated, function(req, res){
     }
     var rand = Math.floor(Math.random() * (trips.length));
     res.send(trips[rand]);
+  });
+})
+
+router.post('/search', isAuthenticated, function(req,res){
+  Trip.find({}).exec(function(error, events) {
+    if (error) {
+      console.log(error);
+      res.status(404);
+      res.end();
+    }else{
+      if (req.body.title){
+        var titleArray = [];
+        var results = fuzzy.filter(req.body.title, titleArray);
+        events.forEach(function(event){
+          titleArray.push(event.title);
+        });
+        var titleResults = fuzzy.filter(req.body.title, titleArray);
+        titleEvents = [];
+        titleResults.forEach(function(result){
+          events.forEach(function(event){
+            if (event.title === result.original){
+              var repeat = false;
+              titleEvents.forEach(function(test){
+                if (test === event){
+                  repeat = true;
+                }
+              })
+              if (!repeat){
+                titleEvents.push(event);
+              }
+            }
+          });
+        })
+        if (titleEvents.length > 0){
+          res.send(titleEvents);
+        } else{
+          res.send(req.body);
+        }
+      }
+
+      // if (req.body.user){
+      //   events.forEach(function(event){
+      //     console.log(event.people);
+      //   });
+      // }
+
+      if (!req.body.title) {
+        res.send(events);
+      }
+
+    }
   });
 })
 

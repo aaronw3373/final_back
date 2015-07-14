@@ -34,7 +34,7 @@ module.exports = function(passport){
                         newUser.fullName =req.param('firstName') + " " + req.param('lastName');
                         newUser.following = [username];
                         newUser.followedBy = [username];
-                        newUser.profilePicture = "batman-profile-default.jpg";
+                        newUser.profilePicture = "https://powplanner.s3.amazonaws.com/1436906600806-3sLLpoqLQXMJ0cBS.jpg";
 
                         // save the user
                         newUser.save(function(err) {

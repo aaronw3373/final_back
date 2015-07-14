@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/user.js');
-// var Status = require('../models/status.js');
+var crypto = require("crypto");
 var Picture = require('../models/picture.js');
 var Comment = require('../models/comment.js');
 var async = require('async');
@@ -16,7 +16,7 @@ require('dotenv').load();
 var aws_access_key =  process.env.AWS_ACCESS_KEY_ID;
 var aws_secret_key = process.env.AWS_SECRET_KEY_ID;
 
-  var isAuthenticated = function(req, res, next) {
+var isAuthenticated = function(req, res, next) {
   if (req.isAuthenticated()){
     return next();
   } else {
@@ -24,6 +24,47 @@ var aws_secret_key = process.env.AWS_SECRET_KEY_ID;
     res.end();
   }
 }
+
+var s3_upload_signature = function(base64Policy){
+  var sig = crypto.createHmac("sha1", aws_secret_key).update(base64Policy).digest("base64");
+  return sig;
+}
+
+var create_s3_upload_policy = function(){
+  var date = new Date();
+  date.setDate(date.getDate() + 1);
+
+  var s3Policy = {
+    "expiration": date,
+    "conditions": [
+      ["starts-with", "$key", ""],
+      {"bucket": "powplanner"},
+      {"acl": "public-read"},
+      ["starts-with", "$Content-Type", ""],
+      [ "content-length-range", 0, 20 * 1024 * 1024 ]
+      // ,
+      // ["starts-with", "$success_action_redirect", "http://localhost:3050/picture/save"]
+    ]
+  };
+
+  // stringify and encode the policy
+  var stringPolicy = JSON.stringify(s3Policy);
+  // console.log("policy:",stringPolicy);
+  var base64Policy = Buffer(stringPolicy, "utf-8").toString("base64");
+  // console.log("policy ",base64Policy);
+  var token = {
+    policy: base64Policy,
+    signature: s3_upload_signature(base64Policy),
+    key: aws_access_key
+  }
+  // console.log(token);
+  return token;
+}
+
+router.get('/s3access', isAuthenticated, function(req, res){
+  var token = create_s3_upload_policy();
+  res.json(token);
+});
 
 
 /* GET ALL USER Pictures */
@@ -80,71 +121,29 @@ router.post('/like/:pictureID', isAuthenticated, function(req, res) {
   });
 });
 
-/*POST PICTURES*/
-AWS.config.update({
-    accessKeyId: aws_access_key,
-    secretAccessKey: aws_secret_key
-});
-
-var s3 = new AWS.S3();
-
-router.use(bodyParser({uploadDir:'./uploads'}));
-
-router.use(multer({
-  limits : { fileSize:10000000 },
-  rename: function (pictures, src) {
-    return src.replace(/\W+/g, '-').toLowerCase();
-  }
-}));
-
-router.post('/upload', isAuthenticated, function(req, res) {
-  if(req.files !== undefined) {
-    fs.readFile(req.files.thumbnail.path, function(err, data){
-      var params = {
-        Bucket: 'powplanner',
-        Key: req.files.thumbnail.name,
-        Body: data,
-        ACL:'public-read',
-      };
-    s3.putObject(params, function (error, response) {
-      if (error) {
-        console.log("Error uploading data: ", error);
-      } else {
-        console.log("Successfully uploaded data to powplanner");
-        User.findOne({
-          username: req.user.username
-        }, function(error) {
-        if (error) {
-          console.log(error);
-          res.status(404);
-          res.end();
-        } else {
-          var newPicture = new Picture();
-          // set the user's picture
-          newPicture.src = req.files.thumbnail.name;
-          newPicture.caption = req.param('caption');
-          newPicture.likes = 0;
-          newPicture.postedAt = new Date();
-          newPicture._creator = req.user.username;
-          // console.log(newPicture);
-          // save the picture
-          newPicture.save(function(err) {
-            if (err) {
-              console.log('Error in Saving status: ' + err);
-              res.end();
-              throw err;
-            } else {
-                console.log('picture saved!');
-                res.status(200);
-                res.end();
-              }
-            });
-          }
-        });
-        }
-      });
-    })
-  }
+router.post('/save', isAuthenticated, function(req, res) {
+  console.log(req.body);
+  res.send(req.body);
+  var newPicture = new Picture();
+  // set the user's picture
+  newPicture.src = req.body.src;
+  newPicture.caption = req.body.caption;
+  newPicture.likes = 0;
+  newPicture.postedAt = new Date();
+  newPicture._creator = req.user.username;
+  // console.log(newPicture);
+  // save the picture
+  newPicture.save(function(err) {
+    if (err) {
+      console.log('Error in Saving status: ' + err);
+      res.end();
+      throw err;
+    } else {
+        console.log('picture saved!');
+        res.status(200);
+        res.end();
+      }
+    });
 });
 
 /* GET One USER PICTURES */
