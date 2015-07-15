@@ -14,7 +14,11 @@ var passport = require('passport');
 var pg = require('pg');
 var pg_hstore = require('pg-hstore')
 var Sequelize = require('sequelize');
-// var sequelize = new Sequelize('powdb', 'aaronw3373',{
+
+
+var app = express();
+
+// var sequelize = new Sequelize('powdb', 'aaron', 'password',{
 //   host: 'localhost',
 //   dialect: 'postgres',
 //   pool: {
@@ -24,9 +28,6 @@ var Sequelize = require('sequelize');
 //   },
 // });
 
-
-
-var app = express();
 
 // Connect to DB
 mongoose.connect(config.mongo.dbUrl);
