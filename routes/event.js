@@ -37,6 +37,31 @@ router.post('/newTrip', isAuthenticated, function(req, res){
    });
 })
 
+router.post('/updateTrip', isAuthenticated, function(req, res){
+  console.log(req.body);
+  // var newTrip = new Trip();
+
+  // newTrip.title = req.body.title;
+  // newTrip.info = req.body.info;
+  // newTrip.location= req.body.location;
+  // newTrip.postedAt = new Date();
+  // newTrip.startDate = req.body.startDate;
+  // newTrip.endDate = req.body.endDate;
+  // newTrip.creator = req.user.username;
+  // newTrip.people = req.body.people;
+  // newTrip.catagories = req.body.catagory;
+
+  // newTrip.save(function(err) {
+  //   if (err) {
+  //     console.log('Error in Saving message: ' + err);
+  //     res.end();
+  //     throw err;
+  //   } else {
+  //       res.send(newTrip);
+  //     }
+  //  });
+})
+
 router.get('/my', isAuthenticated, function(req, res){
   Trip.find({
     people: req.user.username

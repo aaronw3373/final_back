@@ -11,6 +11,20 @@ var config = require('./config');
 var cors = require('cors');
 var passport = require('passport');
 
+var pg = require('pg');
+var pg_hstore = require('pg-hstore')
+var Sequelize = require('sequelize');
+// var sequelize = new Sequelize('powdb', 'aaronw3373',{
+//   host: 'localhost',
+//   dialect: 'postgres',
+//   pool: {
+//     max: 10,
+//     min: 0,
+//     idle: 100000
+//   },
+// });
+
+
 
 var app = express();
 
